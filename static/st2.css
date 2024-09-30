@@ -1,0 +1,120 @@
+* {
+    font-family: serif;
+}
+
+html, body {
+    padding: 0;
+    margin: 0;
+}
+.label {
+       font-size: 6px;
+
+}
+.header {
+    font-size: 25px;
+    color: black;
+    background-color: rgba(147, 112, 219, 0.5);
+    padding: 10px;
+}
+.name, .isu, .var {
+    display: inline-block;
+    margin-right: 10px; /* Общий отступ */
+}
+
+.var {
+    margin-right: 600px;
+}
+.main {
+    display: flex;
+}
+.left-part {
+    width: 45%;
+    display: grid;
+    float: left;
+    grid-template-rows: max-content max-content auto;
+    border: 3px solid black;
+}
+.graph {
+    display: block;
+    height: 350px;
+    width: 350px;
+    margin: 20px auto;
+}
+.main-block {
+    display: grid;
+    grid-template-rows: max-content max-content auto;
+    font-size: 20px;
+    height: 280px;
+    width: 100%;
+    float: left;
+    border-top: 3px solid black;
+}
+.inputX{
+   margin-top: 15px;
+   margin-left: 30px;
+}
+.inputY {
+    margin-top: 15px;
+    margin-left: 30px;
+}
+.inputR {
+    margin-top: 15px;
+    margin-left: 30px;
+}
+.main-block_button {
+    display: inline-block;
+    border: 2px solid #555555;
+    padding: 3px 25px;
+    border-radius: 5px;
+    margin-right: 3px;
+    color: #333333;
+    background-color: #EEEEEE;
+}
+.buttonR {
+    display: inline-block;
+    border: 2px solid #555555;
+    padding: 3px 25px;
+    border-radius: 5px;
+    margin-right: 3px;
+    color: #333333;
+    background-color: #EEEEEE;
+}
+.buttonR.active {
+            background-color: #007BFF; /* Цвет фона при активном состоянии */
+            color: #FFFFFF; /* Цвет текста при активном состоянии */
+}
+#submit {
+    width: 150px; /* Установите необходимую ширину */
+    height: 35px; /* Установите необходимую высоту */
+    font-size: 16px; /* Размер шрифта */
+    background-color: #4CAF50; /* Цвет фона */
+    color: white; /* Цвет текста */
+    border: none; /* Убираем рамку */
+    border-radius: 5px; /* Закругление углов */
+    cursor: pointer; /* Изменение курсора при наведении */
+    margin-left: 470px;
+}
+button.button {
+    margin: 5px; /* Отступы между кнопками */
+    padding: 10px;
+}
+.right-part {
+    display: grid;
+    width: 55%;
+    padding: 10px;
+}
+table {
+    border-collapse: collapse;
+    width: 142%;
+    border-top: 3px solid black;
+
+}
+/* Комбинация селекторов */
+.result thead {
+    background-color: #4CAF50;
+    color: white; 
+}
+
+.result th {
+    text-align: center;
+}

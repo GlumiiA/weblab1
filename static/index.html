@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ru-RU">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Лабараторная работа №1</title>
+    <link rel="stylesheet" href="st2.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="shortcut icon" href="#">
+</head>
+
+<body>
+    <div class="basic-container">
+        <header class="header">
+            <div class="name">Ибрагимова Айгуль Ильгизовна P3211</div>
+            <div class="isu">ИСУ: 408675</div>
+            <div class="var">Вариант: 21116</div>
+        </header>
+        <div class="main">
+            <div class="left-part">
+                <div class="graphic">
+                    <img class="graph" src="graph.svg">
+                </div>
+                <div class="main-block">
+                    <div class="inputX">
+                        <label>Выберите X:</label>
+                        <label><input class = "checkboxX" type="checkbox" name="xValue" value="-3"> -3</label>
+                        <label><input class = "checkboxX" type="checkbox" name="xValue" value="-2"> -2</label>
+                        <label><input class = "checkboxX" type="checkbox" name="xValue" value="-1"> -1</label>
+                        <label><input class = "checkboxX" type="checkbox" name="xValue" value="0"> 0</label>
+                        <label><input class = "checkboxX" type="checkbox" name="xValue" value="1"> 1</label>
+                        <label><input class = "checkboxX" type="checkbox" name="xValue" value="2"> 2</label>
+                        <label><input class = "checkboxX" type="checkbox" name="xValue" value="3"> 3</label>
+                        <label><input class = "checkboxX" type="checkbox" name="xValue" value="4"> 4</label>
+                        <label><input class = "checkboxX" type="checkbox" name="xValue" value="5"> 5</label>
+                    </div>
+
+                    <div class="inputY">
+                        <label>Введите Y:</label>
+                        <input type="text" name="yValue" min="3" max="5" required>
+                    </div>
+
+                    <div class="inputR">
+                        <label>Выберите R:</label>
+                        <input class="buttonR" type="button" name="rValue" value="1">
+                        <input class="buttonR" type="button" name="rValue" value="1.5">
+                        <input class="buttonR" type="button" name="rValue" value="2">
+                        <input class="buttonR" type="button" name="rValue" value="2.5">
+                        <input class="buttonR" type="button" name="rValue" value="3">
+                    </div>
+                    <button class="main-block_button" style="bottom: 15px;" id="submit">Проверить</button>
+                </div>
+            </div>
+            <div class="right-block">
+                <table class="result" border="2">
+                    <thead>
+                        <tr>
+                            <th><h2 class="rowOfTable">X</h2></th>
+                            <th><h2 class="rowOfTable">Y</h2></th>
+                            <th><h2 class="rowOfTable">R</h2></th>
+                            <th><h2 class="rowOfTable">Попадание</h2></th>
+                            <th><h2 class="rowOfTable">Время выполнения</h2></th>
+                            <th><h2 class="rowOfTable">Текущее время</h2></th>
+                        </tr>
+                    </thead>
+                    <tbody id="result">
+                        <tr>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script charset="utf-8" type="text/javascript">
+        // Функция для выбора кнопки R
+         document.addEventListener('DOMContentLoaded', function() {
+            // Код для кнопок
+            document.querySelectorAll('.buttonR').forEach(button => {
+                button.addEventListener('click', function() {
+                    document.querySelectorAll('.buttonR').forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        });
+        $('input[type="checkbox"]').click(function(){  
+            var checkboxGroup = 'input[name="' + $(this).attr('name') + '"]';  
+            $(checkboxGroup).not(this).prop('checked', false);  
+        });
+        document.getElementById('submit').addEventListener('click', function() {
+            const checkboxesX = document.querySelectorAll('input[name="xValue"]:checked');
+            let xValues;
+            if (checkboxesX.length > 0 || checkboxesX.length < 2) {
+                xValues = checkboxesX[0].value; // Получаем значение первого отмеченного чекбокса
+            } else {
+                xValues = undefined; // Если ничего не отмечено
+            }
+            const yValue = document.querySelector('input[name="yValue"]').value;
+
+            const rButtons = document.querySelectorAll('.buttonR');
+            let rValue;
+            rButtons.forEach(button => {
+                if (button.classList.contains('active')) {
+                    rValue = button.value;
+                }
+            });
+
+            if (!rValue) {
+                alert('Пожалуйста, выберите значение R');
+                return;
+            }
+
+            const result = {
+                "x": xValues,
+                "y": yValue,
+                "r": rValue
+            };
+
+            if (isNaN(+result.y) || isNaN(+result.r) || +result.y < -3 || +result.y > 5 || isNaN(+result.x)) {
+                console.log(result);
+                alert("Данные некорректны");
+                return;
+            }
+
+            // отправляеи данные на сервер 
+            $.ajax({
+                url: "/fcgi-bin/labwork1.jar",
+                method: 'POST',
+                dataType: 'json',
+                data: {x: xValues, y: yValue, r: rValue},
+                success: function(data) {
+                    console.log(data);
+                    if (data.error != null) {
+                        alert("Ошибка от сервера");
+                    } else {
+                        let row = $('<tr>').addClass('rowClass');
+                        row.append($('<td>').text(result.x));
+                        row.append($('<td>').text(result.y));
+                        row.append($('<td>').text(result.r));
+                        if (data.isHit) {
+                            row.append($('<td>').text("Есть"));
+                        } else {
+                            row.append($('<td>').text("Нет"));
+                        }
+                        row.append($('<td>').text(data.dur)); 
+                        row.append($('<td>').text(data.curTime)); 
+                        $('#result').append(row);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert(error);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
